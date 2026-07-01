@@ -1,0 +1,11 @@
+- Documentation = "https://docs.example.internal/ai-platform"
+- Source = "https://git.example.internal/ai-agentic-platform"
+- ai_platform = ["py.typed", "migrations/*.sql"]
+- "tests/**/*.py" = ["S101", "S106", "S105"]
+- "src/ai_platform/**/__init__.py" = ["F401"]
+- "--cov=src/ai_platform",
+- source = ["src/ai_platform"]
+- "*/tests/*",
+- "*/__init__.py",
+- "*/migrations/*",
+- 

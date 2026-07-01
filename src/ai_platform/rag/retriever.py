@@ -1,34 +1,3 @@
-You are a senior full-stack engineer. Write ALL source code for this project.
-
-## Objective
-
-
-## Files to Create
-- ```file:pyproject.toml
-- Documentation = "https://docs.example.internal/ai-platform"
-- Source = "https://git.example.internal/ai-agentic-platform"
-- ai_platform = ["py.typed", "migrations/*.sql"]
-- "tests/**/*.py" = ["S101", "S106", "S105"]
-- "src/ai_platform/**/__init__.py" = ["F401"]
-- "--cov=src/ai_platform",
-- source = ["src/ai_platform"]
-- "*/tests/*",
-- "*/__init__.py",
-- "*/migrations/*",
-- ```file:src/ai_platform/__init__.py
-- ```file:src/ai_platform/__version__.py
-- ```file:src/ai_platform/py.typed
-- ```file:src/ai_platform/config.py
-- api_prefix: str = "/api/v1"
-- # LangSmith / observability
-- ```file:src/ai_platform/logging_config.py
-- ```file:src/ai_platform/agents/__init__.py
-- ```file:src/ai_platform/agents/base.py
-- ```file:src/ai_platform/agents/state.py
-- ```file:src/ai_platform/agents/orchestrator.py
-- ```file:src/ai_platform/agents/__main__.py
-- ```file:src/ai_platform/rag/__init__.py
-- ```file:src/ai_platform/rag/retriever.py
 
 ## SPEC.md (read carefully)
 # Proposal: AI Systems Engineer — Agentic AI, Multi-Agent & Enterprise AI Platforms
@@ -81,8 +50,4 @@ You asked for engineering judgment, not a tech-stack checklist. The proposal is 
 5. Include Docker support (Dockerfile, docker-compose.yml)
 6. Include README with "Business Problem Solved" as FIRST section after title
 7. All code must compile/be syntactically valid
-8. Output as file blocks: ```file:path
-content
-```
-
-Write every file completely. No stubs. No TODOs.
+8. Output as file blocks: 
