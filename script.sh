@@ -1,6 +1,1 @@
-cd phase-2-stack && python3 -m py_compile app/__init__.py && echo "app/__init__.py: OK"
-python3 -m py_compile app/settings.py && echo "app/settings.py: OK"
-python3 -m py_compile app/db.py && echo "app/db.py: OK"
-python3 -m py_compile app/main.py && echo "app/main.py: OK"
-python3 -m py_compile scripts/verify_stack.py && echo "scripts/verify_stack.py: OK"
-python3 -m py_compile tests/test_stack_imports.py && echo "tests/test_stack_imports.py: OK"
+mkdir -p docs/architecture
