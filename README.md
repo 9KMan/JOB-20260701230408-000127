@@ -67,6 +67,8 @@ against this contract.
 
 ## Architecture
 
+![Platform architecture](./diagrams/architecture.svg)
+
 - **Agent Runtime:** LangGraph for stateful graph-based agent coordination
   with checkpointing. Each workflow is an explicit `StateGraph` you can
   inspect, pause, and resume.
@@ -111,33 +113,7 @@ uvicorn app.main:app --reload
 
 ## Project Structure
 
-```
-.
-├── app/
-│   ├── api/                # FastAPI routes (added in Phase 3+)
-│   ├── core/               # Config, logging, security helpers
-│   ├── db/                 # Async SQLAlchemy engine + pgvector migration
-│   ├── models/             # ORM: Task, Run, Agent, Document, Review, enums
-│   ├── orchestrator/       # TaskQueue, Agent, HumanReviewQueue, decision boundary
-│   ├── rag/                # Retrieval pipelines (added in Phase 4+)
-│   ├── llm/                # LLM provider abstractions (added in Phase 5+)
-│   ├── settings.py         # Pydantic-settings typed config
-│   └── main.py             # FastAPI app factory + /health
-├── tests/
-│   ├── test_project_structure.py   # Phase 1 contract tests
-│   ├── test_stack_imports.py       # Phase 2 contract tests
-│   └── test_out_of_scope_doc.py    # Phase 6 contract tests
-├── docs/
-│   └── PROJECT_OVERVIEW.md
-├── scripts/
-│   └── verify_stack.py     # Imports every stack component
-├── pyproject.toml
-├── requirements.txt
-├── docker-compose.yml
-├── .env.example
-├── OUT_OF_SCOPE.md
-└── README.md
-```
+![Project structure](./diagrams/project-structure.svg)
 
 ## Requirements Coverage
 

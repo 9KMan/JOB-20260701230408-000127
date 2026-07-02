@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12">
+  <rect width="600" height="360" fill="#fafafa"/>
+
+  <!-- Title -->
+  <text x="300" y="24" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#1f2933">Project structure</text>
+
+  <!-- Tree drawing -->
+  <g fill="#1f2937">
+    <text x="20" y="60">.</text>
+
+    <text x="20" y="84">├── app/</text>
+    <text x="60" y="104">├── api/                # FastAPI routes</text>
+    <text x="60" y="120">├── db/                 # Async SQLAlchemy engine + pgvector migration</text>
+    <text x="60" y="136">├── models/             # ORM: Task, Run, Agent, Document, Review, enums</text>
+    <text x="60" y="152">├── observability/      # Logging, tracing, eval framework</text>
+    <text x="60" y="168">├── orchestrator/       # TaskQueue, Agent, HumanReviewQueue, decision boundary, LangGraph flow</text>
+    <text x="60" y="184">├── rag/                # Embeddings, retriever, three-tier memory</text>
+    <text x="60" y="200">├── ui/                 # Admin router + Jinja2 templates + CSS</text>
+    <text x="60" y="216">├── settings.py         # Pydantic-settings typed config</text>
+    <text x="60" y="232">└── main.py             # FastAPI app factory + /health</text>
+
+    <text x="20" y="256">├── tests/</text>
+    <text x="60" y="272">├── test_orchestrator.py        # queue, agent, decision boundary, review, flow</text>
+    <text x="60" y="288">├── test_api.py                 # FastAPI endpoint tests</text>
+    <text x="60" y="304">├── test_ui.py                  # Admin HTML tests</text>
+    <text x="60" y="320">├── test_project_structure.py   # Phase 1 contract tests</text>
+    <text x="60" y="336">├── test_stack_imports.py       # Phase 2 contract tests</text>
+  </g>
+
+  <!-- Right-side annotations -->
+  <g fill="#6b7280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10">
+    <text x="60" y="200" dx="300">HTTP surface, admin UI</text>
+    <text x="60" y="216" dx="300">typed config, /health, CORS</text>
+  </g>
+</svg>

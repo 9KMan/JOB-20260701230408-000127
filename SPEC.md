@@ -205,35 +205,7 @@ If you have an internal standard on LangChain, we adapt. But the right pattern i
 
 Here's a reference architecture for multi-agent work:
 
-```
-                    ┌─────────────────────────────────────┐
-                    │           Task Queue (Postgres)       │
-                    │  - task_id (PK)                       │
-                    │  - task_state: pending|active|done    │
-                    │  - assigned_agent_id                  │
-                    │  - input_payload (JSONB)              │
-                    │  - claimed_at, lease_until            │
-                    │  - dependencies (JSONB)               │
-                    │  - output_payload (JSONB)             │
-                    └─────────────────────────────────────┘
-                                    ▲ │
-                                    │ │ SELECT ... WHERE task_state='pending'
-                                    │ │ AND lease_until IS NULL OR lease_until < NOW()
-                                    │ │ FOR UPDATE SKIP LOCKED
-                                    │ │  (advisory locks per task_id)
-                                    │ │
-                    ┌───────────────┴─────────────────────┐
-                    │                                       │
-        ┌───────────▼───────────┐         ┌───────────────▼───────────┐
-        │   Agent A (worker)    │         │   Agent B (worker)        │
-        │  - reads task queue   │         │  - reads task queue       │
-        │  - does its work      │         │  - does its work          │
-        │  - writes output      │         │  - writes output          │
-        │  - marks task done    │         │  - marks task done        │
-        │  - may enqueue task   │         │  - may enqueue task       │
-        │    for agent C        │         │    for agent D            │
-        └───────────────────────┘         └───────────────────────────┘
-```
+![Multi-agent coordination via shared task queue](./diagrams/multi-agent-coordination.svg)
 
 Key properties:
 
