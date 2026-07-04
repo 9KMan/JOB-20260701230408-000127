@@ -1,126 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" width="900" height="720">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600">
   <defs>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" stroke-width="0.5"/>
-    </pattern>
     <style>
-      .root       { font: 700 18px ui-monospace, "SF Mono", monospace; fill: #0f172a; }
-      .dir-name   { font: 700 13px ui-monospace, "SF Mono", monospace; fill: #0f172a; }
-      .file-name  { font: 11px ui-monospace, "SF Mono", monospace; fill: #1e293b; }
-      .file-meta  { font: 10px ui-monospace, "SF Mono", monospace; fill: #94a3b8; }
-      .legend     { font: 11px ui-monospace, "SF Mono", monospace; fill: #1e293b; }
-      .footnote   { font: 10px ui-monospace, "SF Mono", monospace; fill: #64748b; }
+
+      .title     { font: 700 18px 'Inter', sans-serif; fill: #0F172A; }
+      .subtitle  { font: 11px 'Inter', sans-serif; fill: #64748B; }
+      .node-name { font: 600 13px 'Inter', sans-serif; fill: #0F172A; }
+      .node-sub  { font: 10px 'Inter', sans-serif; fill: #64748B; }
+      .edge-lbl  { font: 500 10px 'Inter', sans-serif; fill: #64748B; }
+      .footnote  { font: 10px 'Inter', sans-serif; fill: #64748B; opacity: 0.75; }
     </style>
+    <marker id="arrB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/>
+    </marker>
   </defs>
-
-  <rect width="900" height="720" fill="#ffffff"/>
-  <rect width="900" height="720" fill="url(#grid)"/>
-
-  <!-- Title -->
-  <text x="40" y="34" class="root">Project structure</text>
-  <text x="40" y="54" class="footnote">JOB-20260701230408-000127 — AI Agentic Platform (Pydantic-Settings + FastAPI + SQLAlchemy 2.0 + LangGraph)</text>
-
-  <!-- Top-level root files -->
-  <g>
-    <rect x="40" y="80" width="820" height="50" rx="6" fill="#f8fafc"/>
-    <rect x="40" y="80" width="820" height="50" rx="6" fill="rgba(30,41,59,0.5)" stroke="#334155" stroke-width="1"/>
-    <text x="60" y="110" class="dir-name">. (repo root)</text>
-    <text x="200" y="110" class="file-meta">pyproject.toml · docker-compose.yml · Dockerfile · .env.example · conftest.py · README · SPEC</text>
-  </g>
-
-  <!-- app/ region -->
-  <g>
-    <rect x="40" y="150" width="380" height="350" rx="6" fill="#f8fafc"/>
-    <rect x="40" y="150" width="380" height="350" rx="6" fill="rgba(34,211,238,0.1)" stroke="#22d3ee" stroke-width="1.5"/>
-    <text x="60" y="178" class="dir-name" fill="#0e7490">app/  (Python package)</text>
-
-    <!-- app/api -->
-    <rect x="60" y="195" width="340" height="40" rx="4" fill="rgba(34,211,238,0.1)" stroke="#22d3ee" stroke-width="0.5"/>
-    <text x="75" y="220" class="file-name">app/api/</text>
-    <text x="155" y="220" class="file-meta">tasks.py · agents.py · runs.py · review.py</text>
-
-    <!-- app/db -->
-    <rect x="60" y="245" width="340" height="40" rx="4" fill="rgba(76,29,149,0.15)" stroke="#a78bfa" stroke-width="0.5"/>
-    <text x="75" y="270" class="file-name">app/db/</text>
-    <text x="155" y="270" class="file-meta">async SQLAlchemy engine · migrations/001_initial.sql</text>
-
-    <!-- app/models -->
-    <rect x="60" y="295" width="340" height="40" rx="4" fill="rgba(76,29,149,0.15)" stroke="#a78bfa" stroke-width="0.5"/>
-    <text x="75" y="320" class="file-name">app/models/</text>
-    <text x="170" y="320" class="file-meta">task · run · agent · document · review · enums · base</text>
-
-    <!-- app/observability -->
-    <rect x="60" y="345" width="340" height="40" rx="4" fill="rgba(251,146,60,0.15)" stroke="#fb923c" stroke-width="0.5"/>
-    <text x="75" y="370" class="file-name">app/observability/</text>
-    <text x="200" y="370" class="file-meta">logging · tracing · eval</text>
-
-    <!-- app/orchestrator -->
-    <rect x="60" y="395" width="340" height="40" rx="4" fill="rgba(251,191,36,0.18)" stroke="#fbbf24" stroke-width="0.5"/>
-    <text x="75" y="420" class="file-name" fill="#a16207">app/orchestrator/</text>
-    <text x="210" y="420" class="file-meta">agent · queue · decision_boundary · review · langgraph_flow</text>
-
-    <!-- app/rag -->
-    <rect x="60" y="445" width="340" height="40" rx="4" fill="rgba(52,211,153,0.15)" stroke="#34d399" stroke-width="0.5"/>
-    <text x="75" y="470" class="file-name" fill="#047857">app/rag/</text>
-    <text x="155" y="470" class="file-meta">embeddings · retriever · 3-tier memory (working/episodic/semantic)</text>
-
-    <!-- app/ui -->
-    <rect x="60" y="495" width="340" height="60" rx="4" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="0.5"/>
-    <text x="75" y="518" class="file-name">app/ui/</text>
-    <text x="155" y="518" class="file-meta">Jinja2 SSR admin dashboard</text>
-    <text x="75" y="540" class="file-meta">templates/ · static/admin.css · admin.py</text>
-
-    <!-- top-level app/ files -->
-    <rect x="60" y="565" width="340" height="30" rx="4" fill="rgba(167,139,250,0.1)" stroke="#a78bfa" stroke-width="0.5"/>
-    <text x="75" y="585" class="file-name">app/settings.py</text>
-    <text x="220" y="585" class="file-meta">Pydantic-settings config loader</text>
-    <text x="75" y="600" class="file-name">app/main.py</text>
-    <text x="190" y="600" class="file-meta">FastAPI bootstrap · OpenAPI · uvicorn entry</text>
-  </g>
-
-  <!-- tests/ region -->
-  <g>
-    <rect x="440" y="150" width="420" height="240" rx="6" fill="#f8fafc"/>
-    <rect x="440" y="150" width="420" height="240" rx="6" fill="rgba(167,139,250,0.1)" stroke="#a78bfa" stroke-width="1.5"/>
-    <text x="460" y="178" class="dir-name" fill="#6d28d9">tests/</text>
-
-    <rect x="460" y="195" width="380" height="30" rx="4" fill="rgba(167,139,250,0.1)" stroke="#a78bfa" stroke-width="0.5"/>
-    <text x="475" y="215" class="file-name">test_api.py</text>
-    <text x="600" y="215" class="file-meta">FastAPI endpoint integration tests</text>
-
-    <rect x="460" y="235" width="380" height="30" rx="4" fill="rgba(167,139,250,0.1)" stroke="#a78bfa" stroke-width="0.5"/>
-    <text x="475" y="255" class="file-name">test_orchestrator.py</text>
-    <text x="640" y="255" class="file-meta">queue · agent · decision_boundary · review · flow</text>
-
-    <rect x="460" y="275" width="380" height="30" rx="4" fill="rgba(167,139,250,0.1)" stroke="#a78bfa" stroke-width="0.5"/>
-    <text x="475" y="295" class="file-name">test_ui.py</text>
-    <text x="580" y="295" class="file-meta">Admin SSR (Jinja2) — network-dependent</text>
-
-    <rect x="460" y="315" width="380" height="30" rx="4" fill="rgba(167,139,250,0.1)" stroke="#a78bfa" stroke-width="0.5"/>
-    <text x="475" y="335" class="file-name">test_project_structure.py</text>
-    <text x="670" y="335" class="file-meta">Required-files contract</text>
-
-    <rect x="460" y="355" width="380" height="30" rx="4" fill="rgba(167,139,250,0.1)" stroke="#a78bfa" stroke-width="0.5"/>
-    <text x="475" y="375" class="file-name">test_stack_imports.py</text>
-    <text x="650" y="375" class="file-meta">Required config keys + dep sanity</text>
-  </g>
-
-  <!-- docs/ + diagrams/ + scripts/ region -->
-  <g>
-    <rect x="40" y="520" width="820" height="100" rx="6" fill="#f8fafc"/>
-    <rect x="40" y="520" width="820" height="100" rx="6" fill="rgba(94,234,212,0.08)" stroke="#0d9488" stroke-width="1.5"/>
-    <text x="60" y="548" class="dir-name" fill="#0f766e">docs/ · scripts/ · diagrams/</text>
-    <text x="60" y="572" class="file-meta">docs/PROJECT_OVERVIEW.md                — scope, success criteria, stakeholder model</text>
-    <text x="60" y="590" class="file-meta">OUT_OF_SCOPE.md                          — explicit non-goals and deferred workstreams</text>
-    <text x="60" y="608" class="file-meta">scripts/verify_stack.py                  — local-environment sanity check</text>
-  </g>
-
-  <!-- diagrams/ SVGs (existing) -->
-  <g>
-    <rect x="40" y="640" width="820" height="60" rx="6" fill="#f8fafc"/>
-    <rect x="40" y="640" width="820" height="60" rx="6" fill="rgba(251,113,133,0.08)" stroke="#fb7185" stroke-width="1.5"/>
-    <text x="60" y="666" class="dir-name" fill="#be123c">diagrams/  (SVGs)</text>
-    <text x="60" y="688" class="file-meta">architecture.svg · multi-agent-coordination.svg · workflow.svg · project-structure.svg (this file)</text>
-  </g>
+  <rect width="900" height="600" fill="#FFFFFF"/>
+  <text x="40" y="38" class="title">Project Structure · AI Agentic Platform</text>
+  <text x="40" y="58" class="subtitle">Colour-coded by concern (cyan = app/, violet = tests/, teal = root/docs/, rose = diagrams/)</text>
+  <rect x="40" y="90" width="820" height="70" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="40" y="90" width="4" height="70" rx="2" fill="#64748B"/>
+  <text x="56" y="112" class="node-name">.</text>
+  <text x="56" y="128" class="node-sub">pyproject.toml · docker-compose.yml · .env.example · README · SPEC</text>
+  <rect x="40" y="180" width="320" height="90" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="40" y="180" width="4" height="90" rx="2" fill="#E11D48"/>
+  <text x="56" y="202" class="node-name">diagrams/</text>
+  <text x="56" y="218" class="node-sub">architecture · workflow · project-structure · multi-agent-coordination</text>
+  <rect x="380" y="180" width="220" height="90" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="380" y="180" width="4" height="90" rx="2" fill="#0E7490"/>
+  <text x="396" y="202" class="node-name">docs/</text>
+  <text x="396" y="218" class="node-sub">PROJECT_OVERVIEW.md</text>
+  <rect x="620" y="180" width="240" height="90" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="620" y="180" width="4" height="90" rx="2" fill="#0E7490"/>
+  <text x="636" y="202" class="node-name">scripts/</text>
+  <text x="636" y="218" class="node-sub">verify_stack.py</text>
+  <rect x="40" y="290" width="320" height="260" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="40" y="290" width="4" height="260" rx="2" fill="#0EA5E9"/>
+  <text x="56" y="312" class="node-name">app/</text>
+  <text x="56" y="328" class="node-sub">Python package</text>
+  <rect x="60" y="320" width="280" height="60" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="60" y="320" width="4" height="60" rx="2" fill="#2563EB"/>
+  <text x="76" y="342" class="node-name">main.py · settings.py</text>
+  <text x="76" y="358" class="node-sub">FastAPI bootstrap</text>
+  <rect x="60" y="395" width="280" height="60" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="60" y="395" width="4" height="60" rx="2" fill="#2563EB"/>
+  <text x="76" y="417" class="node-name">api/</text>
+  <text x="76" y="433" class="node-sub">tasks · agents · runs · review</text>
+  <rect x="60" y="470" width="280" height="60" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="60" y="470" width="4" height="60" rx="2" fill="#2563EB"/>
+  <text x="76" y="492" class="node-name">orchestrator/</text>
+  <text x="76" y="508" class="node-sub">agent · queue · decision_boundary · langgraph_flow</text>
+  <rect x="380" y="290" width="240" height="240" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="380" y="290" width="4" height="240" rx="2" fill="#0EA5E9"/>
+  <text x="396" y="312" class="node-name">app/ (cont.)</text>
+  <rect x="400" y="320" width="200" height="60" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="400" y="320" width="4" height="60" rx="2" fill="#2563EB"/>
+  <text x="416" y="342" class="node-name">rag/</text>
+  <text x="416" y="358" class="node-sub">embeddings · retriever · memory</text>
+  <rect x="400" y="395" width="200" height="60" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="400" y="395" width="4" height="60" rx="2" fill="#2563EB"/>
+  <text x="416" y="417" class="node-name">observability/</text>
+  <text x="416" y="433" class="node-sub">logging · tracing · eval</text>
+  <rect x="400" y="470" width="200" height="60" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="400" y="470" width="4" height="60" rx="2" fill="#2563EB"/>
+  <text x="416" y="492" class="node-name">models/ · db/</text>
+  <text x="416" y="508" class="node-sub">SQLAlchemy ORM · migrations</text>
+  <rect x="640" y="290" width="220" height="260" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="640" y="290" width="4" height="260" rx="2" fill="#7C3AED"/>
+  <text x="656" y="312" class="node-name">tests/</text>
+  <text x="656" y="328" class="node-sub">79 passed · 2 skipped</text>
+  <rect x="660" y="320" width="180" height="60" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="660" y="320" width="4" height="60" rx="2" fill="#2563EB"/>
+  <text x="676" y="342" class="node-name">test_orchestrator.py</text>
+  <rect x="660" y="395" width="180" height="60" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="660" y="395" width="4" height="60" rx="2" fill="#2563EB"/>
+  <text x="676" y="417" class="node-name">test_api.py</text>
+  <rect x="660" y="470" width="180" height="60" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="660" y="470" width="4" height="60" rx="2" fill="#2563EB"/>
+  <text x="676" y="492" class="node-name">test_ui.py</text>
+  <text x="676" y="508" class="node-sub">network-dependent</text>
 </svg>

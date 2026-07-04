@@ -1,125 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13">
-  <!-- Background -->
-  <rect width="900" height="560" fill="#ffffff"/>
-
-  <!-- Title -->
-  <text x="450" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2933">Platform architecture</text>
-  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#6b7280">Seven capability pillars, single deployment unit</text>
-
-  <!-- Arrow marker -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" width="1100" height="620">
   <defs>
-    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
-    </marker>
+    <style>
+
+      .title     { font: 700 18px 'Inter', 'Helvetica Neue', sans-serif; fill: #0B2545; letter-spacing: 0.4px; }
+      .subtitle  { font: 11px 'Inter', sans-serif; fill: #13315C; opacity: 0.7; }
+      .node-name { font: 600 13px 'Inter', sans-serif; fill: #0B2545; }
+      .node-sub  { font: 10px 'Inter', sans-serif; fill: #13315C; opacity: 0.75; }
+      .edge-lbl  { font: 500 10px 'Inter', sans-serif; fill: #1B9AAA; }
+      .footnote  { font: 10px 'Inter', sans-serif; fill: #13315C; opacity: 0.55; }
+      .layer-tag { font: 600 11px 'Inter', sans-serif; fill: #1B9AAA; letter-spacing: 1px; }
+    </style>
+    <pattern id="dotgrid" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.7" fill="#E5E9F0" opacity="0.55"/>
+    </pattern>
+    <linearGradient id="edgeGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#1B9AAA" stop-opacity="0.15"/>
+      <stop offset="50%"  stop-color="#1B9AAA" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#1B9AAA" stop-opacity="0.15"/>
+    </linearGradient>
   </defs>
-
-  <!-- ============ Row 1: External clients ============ -->
-  <g>
-    <rect x="40" y="80" width="180" height="60" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" rx="6"/>
-    <text x="130" y="105" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">External clients</text>
-    <text x="130" y="125" text-anchor="middle" font-size="11" fill="#334155">HTTP / WebSocket</text>
-  </g>
-  <g>
-    <rect x="360" y="80" width="180" height="60" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" rx="6"/>
-    <text x="450" y="105" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">Operator / Admin</text>
-    <text x="450" y="125" text-anchor="middle" font-size="11" fill="#334155">Server-rendered UI</text>
-  </g>
-  <g>
-    <rect x="680" y="80" width="180" height="60" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" rx="6"/>
-    <text x="770" y="105" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">External tools</text>
-    <text x="770" y="125" text-anchor="middle" font-size="11" fill="#334155">MCP protocol</text>
-  </g>
-
-  <!-- Arrows down to platform -->
-  <line x1="130" y1="140" x2="130" y2="180" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow2)"/>
-  <line x1="450" y1="140" x2="450" y2="180" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow2)"/>
-  <line x1="770" y1="140" x2="770" y2="180" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow2)"/>
-
-  <!-- ============ Row 2: FastAPI app + Admin UI ============ -->
-  <g>
-    <rect x="40" y="180" width="500" height="50" fill="#dbeafe" stroke="#2563eb" stroke-width="2" rx="6"/>
-    <text x="290" y="203" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">FastAPI app (uvicorn, async)</text>
-    <text x="290" y="220" text-anchor="middle" font-size="11" fill="#1e40af">/api/* (Pydantic-validated) + /admin (Jinja2 SSR)</text>
-  </g>
-  <g>
-    <rect x="680" y="180" width="180" height="50" fill="#fef3c7" stroke="#d97706" stroke-width="2" rx="6"/>
-    <text x="770" y="203" text-anchor="middle" font-size="13" font-weight="600" fill="#78350f">MCP gateway</text>
-    <text x="770" y="220" text-anchor="middle" font-size="11" fill="#92400e">Out-of-process tools</text>
-  </g>
-
-  <line x1="770" y1="180" x2="770" y2="140" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow2)"/>
-
-  <!-- ============ Row 3: Orchestrator core ============ -->
-  <g>
-    <rect x="40" y="260" width="820" height="50" fill="#ede9fe" stroke="#7c3aed" stroke-width="2" rx="6"/>
-    <text x="450" y="283" text-anchor="middle" font-size="13" font-weight="600" fill="#4c1d95">LangGraph StateGraph orchestrator</text>
-    <text x="450" y="300" text-anchor="middle" font-size="11" fill="#5b21b6">claim_task → run_agent → check_decision_boundary → [request_human_review | finalize]</text>
-  </g>
-
-  <!-- Down arrows -->
-  <line x1="290" y1="230" x2="290" y2="260" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow2)"/>
-
-  <!-- ============ Row 4: Capability pillars ============ -->
-  <g>
-    <!-- Pillar 1: Agent -->
-    <rect x="40" y="340" width="125" height="80" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5" rx="6"/>
-    <text x="102" y="362" text-anchor="middle" font-size="11" font-weight="600" fill="#14532d">Agent runtime</text>
-    <text x="102" y="380" text-anchor="middle" font-size="10" fill="#166534">Pydantic tools</text>
-    <text x="102" y="395" text-anchor="middle" font-size="10" fill="#166534">OpenAI / Anthropic</text>
-    <text x="102" y="410" text-anchor="middle" font-size="10" fill="#166534">Pillar 1</text>
-  </g>
-  <!-- Pillar 2: RAG -->
-  <g>
-    <rect x="180" y="340" width="125" height="80" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" rx="6"/>
-    <text x="242" y="362" text-anchor="middle" font-size="11" font-weight="600" fill="#1e3a8a">RAG layer</text>
-    <text x="242" y="380" text-anchor="middle" font-size="10" fill="#1e40af">pgvector HNSW</text>
-    <text x="242" y="395" text-anchor="middle" font-size="10" fill="#1e40af">embeddings + cache</text>
-    <text x="242" y="410" text-anchor="middle" font-size="10" fill="#1e40af">Pillar 2</text>
-  </g>
-  <!-- Pillar 3: Memory -->
-  <g>
-    <rect x="320" y="340" width="125" height="80" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" rx="6"/>
-    <text x="382" y="362" text-anchor="middle" font-size="11" font-weight="600" fill="#78350f">3-tier memory</text>
-    <text x="382" y="380" text-anchor="middle" font-size="10" fill="#92400e">working / episodic /</text>
-    <text x="382" y="395" text-anchor="middle" font-size="10" fill="#92400e">semantic</text>
-    <text x="382" y="410" text-anchor="middle" font-size="10" fill="#92400e">Pillar 3</text>
-  </g>
-  <!-- Pillar 4: HITL -->
-  <g>
-    <rect x="460" y="340" width="125" height="80" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5" rx="6"/>
-    <text x="522" y="362" text-anchor="middle" font-size="11" font-weight="600" fill="#7f1d1d">HITL gates</text>
-    <text x="522" y="380" text-anchor="middle" font-size="10" fill="#991b1b">Decision boundary</text>
-    <text x="522" y="395" text-anchor="middle" font-size="10" fill="#991b1b">Review queue</text>
-    <text x="522" y="410" text-anchor="middle" font-size="10" fill="#991b1b">Pillar 4</text>
-  </g>
-  <!-- Pillar 5: Eval/obs -->
-  <g>
-    <rect x="600" y="340" width="125" height="80" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5" rx="6"/>
-    <text x="662" y="362" text-anchor="middle" font-size="11" font-weight="600" fill="#312e81">Eval + observability</text>
-    <text x="662" y="380" text-anchor="middle" font-size="10" fill="#3730a3">loguru JSON</text>
-    <text x="662" y="395" text-anchor="middle" font-size="10" fill="#3730a3">OTel traces + eval harness</text>
-    <text x="662" y="410" text-anchor="middle" font-size="10" fill="#3730a3">Pillar 5</text>
-  </g>
-  <!-- Pillar 6: Governance -->
-  <g>
-    <rect x="40" y="440" width="240" height="60" fill="#fce7f3" stroke="#be185d" stroke-width="1.5" rx="6"/>
-    <text x="160" y="462" text-anchor="middle" font-size="11" font-weight="600" fill="#831843">Governance, audit, RBAC</text>
-    <text x="160" y="480" text-anchor="middle" font-size="10" fill="#9d174d">Pillar 6</text>
-  </g>
-  <!-- Pillar 7: Workflow automation -->
-  <g>
-    <rect x="300" y="440" width="240" height="60" fill="#cffafe" stroke="#0e7490" stroke-width="1.5" rx="6"/>
-    <text x="420" y="462" text-anchor="middle" font-size="11" font-weight="600" fill="#155e75">Workflow automation + integrations</text>
-    <text x="420" y="480" text-anchor="middle" font-size="10" fill="#0e7490">Pillar 7</text>
-  </g>
-
-  <!-- Down arrows to storage row -->
-  <line x1="450" y1="500" x2="450" y2="520" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow2)"/>
-
-  <!-- ============ Row 5: Storage ============ -->
-  <g>
-    <rect x="120" y="520" width="660" height="30" fill="#f1f5f9" stroke="#334155" stroke-width="2" rx="6"/>
-    <text x="450" y="540" text-anchor="middle" font-size="12" font-weight="600" fill="#f8fafc">PostgreSQL + pgvector (single ACID engine for tasks, runs, audit, embeddings)</text>
-  </g>
+  <rect width="1100" height="620" fill="#FFFFFF"/>
+  <rect width="1100" height="620" fill="url(#dotgrid)" opacity="0.6"/>
+  <text x="40" y="38" class="title">AI Agentic Platform · 7-Pillar Isometric Architecture</text>
+  <text x="40" y="58" class="subtitle">LangGraph orchestration · pgvector RAG · 3-tier memory · HITL via DecisionBoundary middleware</text>
+  <polygon points="80,120 300,120 286.143593539449,112.0 66.14359353944899,112.0"   fill="#FFFFFF"   stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="300,120 300,210 286.143593539449,202.0 286.143593539449,112.0" fill="#E5EAF2" stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="80,120 80,210 66.14359353944899,202.0 66.14359353944899,112.0"  fill="#F4F7FB"  stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <rect x="80" y="120" width="220" height="90" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <polyline points="80,120 300,120 300,210 80,210" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <text x="96" y="152" class="node-name">1. Agent orchestration</text>
+  <text x="96" y="172" class="node-sub">LangGraph StateGraph</text>
+  <rect x="80" y="120" width="220" height="5" rx="2" fill="#1B9AAA" opacity="0.85"/>
+  <polygon points="320,120 540,120 526.143593539449,112.0 306.143593539449,112.0"   fill="#FFFFFF"   stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="540,120 540,210 526.143593539449,202.0 526.143593539449,112.0" fill="#E5EAF2" stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="320,120 320,210 306.143593539449,202.0 306.143593539449,112.0"  fill="#F4F7FB"  stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <rect x="320" y="120" width="220" height="90" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <polyline points="320,120 540,120 540,210 320,210" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <text x="336" y="152" class="node-name">2. RAG retrieval</text>
+  <text x="336" y="172" class="node-sub">pgvector HNSW</text>
+  <rect x="320" y="120" width="220" height="5" rx="2" fill="#1B9AAA" opacity="0.85"/>
+  <polygon points="560,120 780,120 766.143593539449,112.0 546.143593539449,112.0"   fill="#FFFFFF"   stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="780,120 780,210 766.143593539449,202.0 766.143593539449,112.0" fill="#E5EAF2" stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="560,120 560,210 546.143593539449,202.0 546.143593539449,112.0"  fill="#F4F7FB"  stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <rect x="560" y="120" width="220" height="90" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <polyline points="560,120 780,120 780,210 560,210" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <text x="576" y="152" class="node-name">3. Memory (3-tier)</text>
+  <text x="576" y="172" class="node-sub">Working / Episodic / Semantic</text>
+  <rect x="560" y="120" width="220" height="5" rx="2" fill="#1B9AAA" opacity="0.85"/>
+  <polygon points="800,120 1020,120 1006.143593539449,112.0 786.143593539449,112.0"   fill="#FFFFFF"   stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="1020,120 1020,210 1006.143593539449,202.0 1006.143593539449,112.0" fill="#E5EAF2" stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="800,120 800,210 786.143593539449,202.0 786.143593539449,112.0"  fill="#F4F7FB"  stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <rect x="800" y="120" width="220" height="90" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <polyline points="800,120 1020,120 1020,210 800,210" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <text x="816" y="152" class="node-name">4. Human-in-the-loop</text>
+  <text x="816" y="172" class="node-sub">DecisionBoundary middleware</text>
+  <rect x="800" y="120" width="220" height="5" rx="2" fill="#DC2626" opacity="0.85"/>
+  <polygon points="80,250 300,250 286.143593539449,242.0 66.14359353944899,242.0"   fill="#FFFFFF"   stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="300,250 300,340 286.143593539449,332.0 286.143593539449,242.0" fill="#E5EAF2" stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="80,250 80,340 66.14359353944899,332.0 66.14359353944899,242.0"  fill="#F4F7FB"  stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <rect x="80" y="250" width="220" height="90" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <polyline points="80,250 300,250 300,340 80,340" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <text x="96" y="282" class="node-name">5. Eval + observability</text>
+  <text x="96" y="302" class="node-sub">loguru · OTel · Prometheus</text>
+  <rect x="80" y="250" width="220" height="5" rx="2" fill="#1B9AAA" opacity="0.85"/>
+  <polygon points="320,250 540,250 526.143593539449,242.0 306.143593539449,242.0"   fill="#FFFFFF"   stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="540,250 540,340 526.143593539449,332.0 526.143593539449,242.0" fill="#E5EAF2" stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="320,250 320,340 306.143593539449,332.0 306.143593539449,242.0"  fill="#F4F7FB"  stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <rect x="320" y="250" width="220" height="90" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <polyline points="320,250 540,250 540,340 320,340" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <text x="336" y="282" class="node-name">6. Governance &amp; security</text>
+  <text x="336" y="302" class="node-sub">Audit log · RBAC · Pydantic v2</text>
+  <rect x="320" y="250" width="220" height="5" rx="2" fill="#DC2626" opacity="0.85"/>
+  <polygon points="560,250 780,250 766.143593539449,242.0 546.143593539449,242.0"   fill="#FFFFFF"   stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="780,250 780,340 766.143593539449,332.0 766.143593539449,242.0" fill="#E5EAF2" stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="560,250 560,340 546.143593539449,332.0 546.143593539449,242.0"  fill="#F4F7FB"  stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <rect x="560" y="250" width="220" height="90" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <polyline points="560,250 780,250 780,340 560,340" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <text x="576" y="282" class="node-name">7. Workflow automation</text>
+  <text x="576" y="302" class="node-sub">FastAPI HTTP/WS + Jinja2 SSR</text>
+  <rect x="560" y="250" width="220" height="5" rx="2" fill="#1B9AAA" opacity="0.85"/>
+  <polygon points="800,250 1020,250 1006.143593539449,242.0 786.143593539449,242.0"   fill="#FFFFFF"   stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="1020,250 1020,340 1006.143593539449,332.0 1006.143593539449,242.0" fill="#E5EAF2" stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <polygon points="800,250 800,340 786.143593539449,332.0 786.143593539449,242.0"  fill="#F4F7FB"  stroke="#13315C" stroke-width="1.2" stroke-linejoin="round"/>
+  <rect x="800" y="250" width="220" height="90" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <polyline points="800,250 1020,250 1020,340 800,340" fill="none" stroke="#13315C" stroke-width="1.2"/>
+  <text x="816" y="282" class="node-name">External clients</text>
+  <text x="816" y="302" class="node-sub">HTTP · WebSocket · MCP tools</text>
+  <rect x="800" y="250" width="220" height="5" rx="2" fill="#1B9AAA" opacity="0.85"/>
+  <line x1="300" y1="165" x2="320" y2="165" stroke="#1B9AAA" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="540" y1="165" x2="560" y2="165" stroke="#1B9AAA" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="780" y1="165" x2="800" y2="165" stroke="#1B9AAA" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="910" y1="210" x2="430" y2="295" stroke="#1B9AAA" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M 150.0 448.0
+             a 90.0 22.0 0 0 0 180.0 0
+             v 44
+             a 90.0 22.0 0 0 1 -180.0 0 z" fill="#F4F7FB" stroke="#13315C" stroke-width="1.2"/>
+  <ellipse cx="240" cy="448.0" rx="90.0" ry="22.0" fill="#FFFFFF" stroke="#13315C" stroke-width="1.2"/>
+  <text x="240" y="472" class="node-name" text-anchor="middle">PostgreSQL 16 + pgvector</text>
+  <text x="240" y="492" class="node-sub" text-anchor="middle">advisory locks · HNSW</text>
+  <path d="M 450.0 448.0
+             a 70.0 22.0 0 0 0 140.0 0
+             v 44
+             a 70.0 22.0 0 0 1 -140.0 0 z" fill="#F4F7FB" stroke="#13315C" stroke-width="1.2"/>
+  <ellipse cx="520" cy="448.0" rx="70.0" ry="22.0" fill="#FFFFFF" stroke="#13315C" stroke-width="1.2"/>
+  <text x="520" y="472" class="node-name" text-anchor="middle">Redis 7</text>
+  <text x="520" y="492" class="node-sub" text-anchor="middle">queue · cache · sessions</text>
+  <path d="M 690.0 448.0
+             a 90.0 22.0 0 0 0 180.0 0
+             v 44
+             a 90.0 22.0 0 0 1 -180.0 0 z" fill="#F4F7FB" stroke="#13315C" stroke-width="1.2"/>
+  <ellipse cx="780" cy="448.0" rx="90.0" ry="22.0" fill="#FFFFFF" stroke="#13315C" stroke-width="1.2"/>
+  <text x="780" y="472" class="node-name" text-anchor="middle">OpenAI + Anthropic SDKs</text>
+  <text x="780" y="492" class="node-sub" text-anchor="middle">raw · no LangChain</text>
+  <text x="40" y="595" class="footnote">All write paths into Postgres go through app/orchestrator/queue.py (TaskQueue) with advisory locks. Pillar 4 (HITL) gates irreversible actions.</text>
 </svg>
