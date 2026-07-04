@@ -106,7 +106,8 @@ regulated-industry certifications, etc.).
 | `tests/test_ui.py` | Admin UI server-render integration |
 | `diagrams/architecture.svg` | Full 7-pillar platform architecture |
 | `diagrams/multi-agent-coordination.svg` | StateGraph + queue + review flow |
-| `diagrams/project-structure.svg` | Module tree |
+| `diagrams/workflow.svg` | End-to-end multi-agent workflow (6 stages, DecisionBoundary branch) |
+| `diagrams/project-structure.svg` | Module tree (colour-coded by concern) |
 | `docs/PROJECT_OVERVIEW.md` | Scope, success criteria, stakeholder model |
 | `OUT_OF_SCOPE.md` | Explicit non-goals and deferred workstreams |
 | `SPEC.md` | Full specification |
@@ -221,71 +222,20 @@ For the agent-coordination flow specifically, see
 End-to-end multi-agent task lifecycle, from API submission to HumanReviewQueue
 approval:
 
-```
-┌──────────────────┐   POST /api/tasks     ┌──────────────────┐
-│ External client  │ ────────────────────► │   FastAPI        │
-│ (Operator / UI)  │  { agent, input, … }  │   app/api/       │
-└────────┬─────────┘                       └────────┬─────────┘
-         │                                          │ INSERT tasks
-         │                              ┌───────────▼───────────┐
-         │                              │  PostgreSQL           │
-         │                              │  + pgvector           │
-         │                              │  (with advisory       │
-         │                              │   lock support)       │
-         │                              └───────────┬───────────┘
-         │                                          │ SELECT FOR UPDATE SKIP LOCKED
-         │                                          │ per-task advisory_lock
-         │                                          ▼
-         │                              ┌───────────────────────┐
-         │                              │  TaskQueue.claim_task │
-         │                              │  (lease with TTL)     │
-         │                              └───────────┬───────────┘
-         │                                          │ claim_task_id
-         │                                          ▼
-         │                              ┌───────────────────────┐
-         │                              │  LangGraph            │
-         │                              │  StateGraph.run_node  │
-         │                              │  ─────────────────────│
-         │                              │  • scratchpad (run)   │
-         │                              │  • LLM tool call      │
-         │                              │  • DecisionBoundary?  │
-         │                              └───────────┬───────────┘
-         │                                          │
-         │                                  ┌───────┴───────┐
-         │                            tool class:           tool class:
-         │                            reversible           irreversible
-         │                                  │                   │
-         │                                  │                   ▼
-         │                                  │       ┌─────────────────────┐
-         │                                  │       │ DecisionBoundary    │
-         │                                  │       │ Middleware: ENQUEUE │
-         │                                  │       │ in HumanReviewQueue │
-         │                                  │       └──────────┬──────────┘
-         │                                  │                  │ pending review
-         │                                  │                  │
-         │                                  │                  ▼
-         │                                  │       ┌─────────────────────┐
-         │                                  │       │  Operator UI        │
-         │                                  │       │  /admin/review      │
-         │                                  │       │  approve / reject   │
-         │                                  │       └──────────┬──────────┘
-         │                                  │                  │ approval
-         │                                  │     ┌────────────┴────────────┐
-         │                                  │     │                         │
-         │                                  ▼     ▼                         ▼
-         │                       ┌──────────────────┐         ┌──────────────────────┐
-         │                       │  RAG retriever   │         │ Postgres            │
-         │                       │  semantic search │ ──────► │  enterprise_state  │
-         │                       │  (pgvector HNSW) │         │  + audit_log       │
-         │                       └──────────────────┘         └──────────────────────┘
-         │
-         │
-         ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│  Observability (always-on): loguru JSON · OTel traces · Prometheus counters   │
-│  Governance (always-on): audit_log + RBAC + Pydantic v2 runtime validation   │
-└──────────────────────────────────────────────────────────────────────────────┘
-```
+![End-to-end multi-agent workflow](./diagrams/workflow.svg)
+
+The diagram above walks through six stages:
+
+1. **External client + Operator UI** posts a task to the API.
+2. **FastAPI** (`app/api/`) ingests it; validates payload via Pydantic v2.
+3. **Postgres + pgvector** records it; advisory locks serialise claim contention.
+4. **TaskQueue.claim_task** wins the lease; the work proceeds.
+5. **LangGraph StateGraph.run_node** runs the agent (scratchpad + LLM tool call).
+6. **DecisionBoundary middleware** branches on `tool_class`:
+   - **Reversible tools** → `RAG retriever` reads documents from the pgvector HNSW index.
+   - **Irreversible tools** (`send_email`, `deploy_code`, `mutate_record`) → `HumanReviewQueue` blocks until an **Operator UI** approval arrives.
+
+Every stage writes to the **always-on observability + governance** band: loguru JSON, OTel traces, Prometheus counters, audit log, RBAC, and Pydantic v2 runtime validation on every inbound payload.
 
 ### Two minute runnable PoC
 
@@ -479,61 +429,11 @@ operational complexity not warranted at v1 scale.
 
 ![Project structure](./diagrams/project-structure.svg)
 
-```
-.
-├── README.md                                  # this file
-├── SPEC.md                                    # full specification
-├── pyproject.toml                             # PEP 621 packaging
-├── docker-compose.yml                         # postgres + redis + api
-├── Dockerfile
-├── requirements.txt                           # mirror of pyproject deps for legacy pip
-├── .env.example                               # required env vars
-├── conftest.py                                # top-level path setup
-├── docs/
-│   └── PROJECT_OVERVIEW.md                    # scope, success criteria, stakeholders
-├── diagrams/
-│   ├── architecture.svg                       # 7-pillar platform architecture
-│   ├── multi-agent-coordination.svg           # StateGraph + queue + review flow
-│   └── project-structure.svg                  # module tree
-├── app/
-│   ├── main.py                                # FastAPI bootstrap
-│   ├── settings.py                            # Pydantic-settings config
-│   ├── api/
-│   │   ├── tasks.py                           # POST/GET /api/tasks/*
-│   │   ├── agents.py                          # GET /api/agents/*
-│   │   ├── runs.py                            # GET /api/runs/*
-│   │   └── review.py                          # GET/POST /api/review/*
-│   ├── orchestrator/
-│   │   ├── agent.py                           # runtime + scratchpad
-│   │   ├── queue.py                           # lease-based TaskQueue + advisory locks
-│   │   ├── decision_boundary.py               # HITL gate middleware
-│   │   ├── review.py                          # HumanReviewQueue
-│   │   └── langgraph_flow.py                  # StateGraph composer
-│   ├── rag/
-│   │   ├── embeddings.py                      # OpenAI / Anthropic embedding provider
-│   │   ├── retriever.py                       # pgvector HNSW semantic search
-│   │   └── memory.py                          # 3-tier memory (working/episodic/semantic)
-│   ├── observability/
-│   │   ├── logging.py                         # loguru + SecretsFilter
-│   │   ├── tracing.py                         # OpenTelemetry tracing
-│   │   └── eval.py                            # eval harness
-│   ├── models/                                # SQLAlchemy 2.0 ORM (agent, base, document, enums, review, run, task)
-│   ├── db/migrations/001_initial.sql          # idempotent DDL (pgcrypto + vector + 7 tables)
-│   └── ui/
-│       ├── admin.py                           # admin dashboard backend (Jinja2 SSR)
-│       ├── templates/                         # dashboard / agents / tasks / runs / review
-│       └── static/admin.css
-├── scripts/
-│   └── verify_stack.py                        # local-environment sanity check
-├── tests/
-│   ├── test_api.py
-│   ├── test_orchestrator.py
-│   ├── test_stack_imports.py
-│   ├── test_out_of_scope_doc.py               # OUT_OF_SCOPE ↔ code cross-check
-│   ├── test_project_structure.py              # required-files contract
-│   └── test_ui.py                             # admin SSR (env-dependent)
-└── .planning/                                 # 7 GSD phase PLAN files (gitignored)
-```
+The diagram shows the full module layout, colour-coded by concern (cyan = `app/` package, violet = `tests/`, teal = `docs/`/`scripts/`/root, rose = `diagrams/` SVGs).
+
+For a text-search-friendly listing of every file, see the canonical `find . -not -path './.venv/*' -not -path './.git/*' -not -path '*/__pycache__/*' -not -path './.planning/*' -not -path './.pytest_cache/*' | sort` invocation documented in `scripts/verify_stack.py`.
+
+The complete inventory (49 files in `app/`, 8 test files, 4 diagrams) maps to the colour-coded regions in the SVG.
 
 ---
 
