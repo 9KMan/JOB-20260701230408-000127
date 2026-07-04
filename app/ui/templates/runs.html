@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Run {{ run.id[:8] }} · Admin{% endblock %}
+{% block heading %}Run <code class="mono">{{ run.id[:8] }}</code>{% endblock %}
+{% block meta %}
+  <span class="badge badge-{{ run.status }}">{{ run.status }}</span>
+{% endblock %}
+{% block body %}
+<section class="card">
+  <dl class="definition-list">
+    <dt>Run ID</dt>          <dd><code class="mono">{{ run.id }}</code></dd>
+    <dt>Agent ID</dt>        <dd>{% if run.agent_id %}<code class="mono">{{ run.agent_id }}</code>{% else %}<span class="muted">—</span>{% endif %}</dd>
+    <dt>Task ID</dt>         <dd>{% if run.task_id %}<code class="mono">{{ run.task_id }}</code>{% else %}<span class="muted">—</span>{% endif %}</dd>
+    <dt>Started</dt>         <dd class="muted">{{ run.started_at }}</dd>
+    <dt>Finished</dt>        <dd class="muted">{{ run.finished_at }}</dd>
+    <dt>Tokens (in / out)</dt><dd>{{ run.tokens_in }} / {{ run.tokens_out }}</dd>
+    <dt>Cost</dt>            <dd class="mono">${{ "%.4f"|format(run.cost_usd) }}</dd>
+    <dt>Error</dt>           <dd class="text-error">{{ run.error_message or '—' }}</dd>
+  </dl>
+</section>
+
+<section class="card">
+  <h2 class="card-title">Timeline</h2>
+  <ol class="timeline">
+    <li class="timeline-step done">
+      <span class="timeline-marker">▶</span>
+      <span class="timeline-label">Started</span>
+      <span class="timeline-time muted">{{ run.started_at }}</span>
+    </li>
+    <li class="timeline-step {% if run.status == 'failed' %}error{% else %}done{% endif %}">
+      <span class="timeline-marker">{% if run.status == 'failed' %}✗{% else %}●{% endif %}</span>
+      <span class="timeline-label">{% if run.status == 'failed' %}Failed{% else %}Completed{% endif %}</span>
+      <span class="timeline-time muted">{{ run.finished_at }}</span>
+    </li>
+  </ol>
+</section>
+
+{% if run.log %}
+<section class="card">
+  <h2 class="card-title">Log</h2>
+  <pre class="log-block">{{ run.log | tojson(indent=2) }}</pre>
+</section>
+{% endif %}
+{% endblock %}

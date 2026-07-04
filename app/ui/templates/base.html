@@ -1,0 +1,37 @@
+{# Base template — sidebar nav + content block. #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Agentic AI Platform · Admin{% endblock %}</title>
+  <link rel="stylesheet" href="/admin/static/admin.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Admin</span>
+      <span class="sidebar-version">v0.2.0</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/admin"            class="nav-link {% if request.url.path == '/admin' %}active{% endif %}">Dashboard</a>
+      <a href="/admin/tasks"      class="nav-link {% if '/admin/tasks' in request.url.path %}active{% endif %}">Tasks</a>
+      <a href="/admin/agents"     class="nav-link {% if '/admin/agents' in request.url.path %}active{% endif %}">Agents</a>
+      <a href="/admin/runs"       class="nav-link {% if '/admin/runs' in request.url.path %}active{% endif %}">Runs</a>
+      <a href="/admin/review"     class="nav-link {% if '/admin/review' in request.url.path %}active{% endif %}">Review queue</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/docs" target="_blank" rel="noopener">API docs ↗</a>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="main-header">
+      <h1 class="main-title">{% block heading %}Admin{% endblock %}</h1>
+      <div class="main-meta">{% block meta %}{% endblock %}</div>
+    </header>
+    <section class="main-body">
+      {% block body %}{% endblock %}
+    </section>
+  </main>
+</body>
+</html>

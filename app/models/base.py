@@ -17,7 +17,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any
 
-from sqlalchemy import DateTime
+from sqlalchemy import JSON, DateTime
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -31,6 +31,13 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
+# PostgreSQL JSONB with a SQLite-compatible JSON fallback. This lets
+# the test suite use an in-memory SQLite database without a Postgres
+# instance while still producing JSONB columns in production.
+JSONBDictType = JSONB().with_variant(JSON(), "sqlite")
+JSONBListType = JSONB().with_variant(JSON(), "sqlite")
+
+
 class Base(DeclarativeBase):
     """Project-wide declarative base.
 
@@ -40,8 +47,8 @@ class Base(DeclarativeBase):
 
     type_annotation_map = {
         uuid.UUID: UUID(as_uuid=True),
-        dict[str, Any]: JSONB,
-        list[Any]: JSONB,
+        dict[str, Any]: JSONBDictType,
+        list[Any]: JSONBListType,
     }
 
 

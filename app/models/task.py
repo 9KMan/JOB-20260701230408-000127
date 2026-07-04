@@ -25,7 +25,8 @@ from datetime import datetime
 from typing import Any, Optional
 
 from sqlalchemy import Index, Integer, String, Text, text
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import UUID
+from app.models.base import JSONBDictType as JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
@@ -68,13 +69,13 @@ class Task(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         JSONB,
         nullable=False,
         default=dict,
-        server_default=text("'{}'::jsonb"),
+        server_default=text("'{}'"),
     )
     output_payload: Mapped[dict[str, Any]] = mapped_column(
         JSONB,
         nullable=False,
         default=dict,
-        server_default=text("'{}'::jsonb"),
+        server_default=text("'{}'"),
     )
     assigned_agent_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         UUID(as_uuid=True),
@@ -106,6 +107,8 @@ class Task(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
 
     # Composite indexes — see TaskQueue.claim() and recover_stale_tasks().
+    # Note: ``created_at`` is already indexed by TimestampMixin (with
+    # ``index=True``), so we don't redeclare it here.
     __table_args__ = (
         Index(
             "ix_tasks_state_lease_until",
@@ -114,7 +117,6 @@ class Task(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         ),
         Index("ix_tasks_assigned_agent_id", "assigned_agent_id"),
         Index("ix_tasks_source_doc_id", "source_doc_id"),
-        Index("ix_tasks_created_at", "created_at"),
     )
 
     def __repr__(self) -> str:  # pragma: no cover

@@ -213,4 +213,28 @@ class HumanReviewQueue:
 
 # pydantic BaseModel is imported above for the ReviewItem class.
 
-__all__ = ["HumanReviewQueue", "ReviewItem"]
+# Module-level singleton. Callers should use this rather than instantiating
+# ``HumanReviewQueue()`` directly so tests can monkeypatch the queue.
+_default_review_queue: Optional[HumanReviewQueue] = None
+
+
+def get_default_review_queue() -> HumanReviewQueue:
+    """Return the process-wide :class:`HumanReviewQueue` singleton."""
+    global _default_review_queue
+    if _default_review_queue is None:
+        _default_review_queue = HumanReviewQueue()
+    return _default_review_queue
+
+
+def reset_default_review_queue() -> None:
+    """Drop the singleton. Tests use this between cases."""
+    global _default_review_queue
+    _default_review_queue = None
+
+
+__all__ = [
+    "HumanReviewQueue",
+    "ReviewItem",
+    "get_default_review_queue",
+    "reset_default_review_queue",
+]

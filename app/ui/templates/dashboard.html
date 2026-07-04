@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Admin{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block meta %}
+  <span class="muted">Snapshot of {{ total_tasks }} tasks, {{ total_runs }} runs, {{ total_agents }} agents.</span>
+{% endblock %}
+{% block body %}
+<section class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total tasks</div>
+    <div class="stat-value">{{ total_tasks }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Running</div>
+    <div class="stat-value text-info">{{ state_counts.get('running', 0) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Pending</div>
+    <div class="stat-value text-warn">{{ state_counts.get('pending', 0) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Awaiting review</div>
+    <div class="stat-value text-warn">{{ state_counts.get('awaiting_review', 0) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Completed</div>
+    <div class="stat-value text-success">{{ state_counts.get('completed', 0) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Failed</div>
+    <div class="stat-value text-error">{{ state_counts.get('failed', 0) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Cancelled</div>
+    <div class="stat-value text-muted">{{ state_counts.get('cancelled', 0) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total runs</div>
+    <div class="stat-value">{{ total_runs }}</div>
+  </div>
+</section>
+
+<section class="card">
+  <h2 class="card-title">Recent tasks</h2>
+  {% if recent_tasks %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Created</th>
+        <th>State</th>
+        <th>Task ID</th>
+        <th>Agent</th>
+        <th>Retries</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in recent_tasks %}
+      <tr>
+        <td class="muted">{{ t.created_at }}</td>
+        <td><span class="badge badge-{{ t.state }}">{{ t.state }}</span></td>
+        <td><code class="mono">{{ t.id[:8] }}</code></td>
+        <td>{% if t.assigned_agent_id %}<code class="mono">{{ t.assigned_agent_id[:8] }}</code>{% else %}—{% endif %}</td>
+        <td>{{ t.retry_count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No tasks yet. <a href="/docs#/tasks">Enqueue one via the API</a>.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2 class="card-title">Recent runs</h2>
+  {% if recent_runs %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Started</th>
+        <th>Status</th>
+        <th>Run ID</th>
+        <th>Agent</th>
+        <th>Tokens (in / out)</th>
+        <th>Cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in recent_runs %}
+      <tr>
+        <td class="muted">{{ r.started_at }}</td>
+        <td><span class="badge badge-{{ r.status }}">{{ r.status }}</span></td>
+        <td><a class="mono" href="/admin/runs/{{ r.id }}">{{ r.id[:8] }}</a></td>
+        <td>{% if r.agent_id %}<code class="mono">{{ r.agent_id[:8] }}</code>{% else %}—{% endif %}</td>
+        <td>{{ r.tokens_in }} / {{ r.tokens_out }}</td>
+        <td class="mono">${{ "%.4f"|format(r.cost_usd) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No runs yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

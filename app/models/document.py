@@ -18,7 +18,8 @@ from typing import Any, Optional
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import Index, String, Text, text
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import UUID
+from app.models.base import JSONBDictType as JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
@@ -79,7 +80,7 @@ class Document(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         JSONB,
         nullable=False,
         default=dict,
-        server_default=text("'{}'::jsonb"),
+        server_default=text("'{}'"),
     )
     fetched_at: Mapped[datetime] = mapped_column(
         # Uses the default from TimestampMixin via column definition

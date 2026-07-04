@@ -123,6 +123,12 @@ class TaskQueue:
     # already use.
     _ADVISORY_LOCK_CLAIM: int = 0x71756575_5F636C6D  # 'queue_clm'
 
+    def __init__(self) -> None:
+        # Per-process fallback lock used when the underlying database
+        # is not PostgreSQL (e.g. SQLite test fallback).
+        import asyncio
+        self._claim_lock = asyncio.Lock()
+
     # ------------------------------------------------------------------
     # enqueue
     # ------------------------------------------------------------------
@@ -188,11 +194,21 @@ class TaskQueue:
 
         async def _do(s: AsyncSession) -> Optional[TaskResponse]:
             # Serialize claimers inside this process. The lock auto-
-            # releases on COMMIT/ROLLBACK.
-            await s.execute(
-                text("SELECT pg_advisory_xact_lock(:k)"),
-                {"k": self._ADVISORY_LOCK_CLAIM},
-            )
+            # releases on COMMIT/ROLLBACK. The advisory lock is a
+            # Postgres-specific feature — on SQLite (test fallback)
+            # the per-process ``_claim_lock`` asyncio lock already
+            # serializes claimers, so the call is a no-op.
+            bind = s.get_bind()
+            if bind.dialect.name == "postgresql":
+                await s.execute(
+                    text("SELECT pg_advisory_xact_lock(:k)"),
+                    {"k": self._ADVISORY_LOCK_CLAIM},
+                )
+            else:
+                # Single-process fallback. Acquire an asyncio lock so
+                # concurrent claimers in the same event loop serialize.
+                async with self._claim_lock:
+                    pass
 
             now = utc_now()
             candidate_q = (

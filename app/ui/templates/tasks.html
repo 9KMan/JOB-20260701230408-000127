@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Tasks · Admin{% endblock %}
+{% block heading %}Tasks{% endblock %}
+{% block meta %}
+  <span class="muted">Showing page {{ page }} of {{ pages }} ({{ total }} total)</span>
+{% endblock %}
+{% block body %}
+<section class="filters">
+  <a href="/admin/tasks"           class="filter-pill {% if state == 'all' %}active{% endif %}">all</a>
+  {% for s in ['pending', 'running', 'awaiting_review', 'completed', 'failed', 'cancelled'] %}
+  <a href="/admin/tasks?state={{ s }}" class="filter-pill {% if state == s %}active{% endif %}">{{ s }}</a>
+  {% endfor %}
+  <span class="filter-spacer"></span>
+  <span class="muted small">Per page:</span>
+  {% for n in [10, 25, 50, 100] %}
+  <a href="/admin/tasks?state={{ state }}&per_page={{ n }}&page=1" class="filter-pill {% if per_page == n %}active{% endif %}">{{ n }}</a>
+  {% endfor %}
+</section>
+
+<section class="card">
+  {% if tasks %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Created</th>
+        <th>State</th>
+        <th>Task ID</th>
+        <th>Agent</th>
+        <th>Retries</th>
+        <th>Error</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tasks %}
+      <tr>
+        <td class="muted">{{ t.created_at }}</td>
+        <td><span class="badge badge-{{ t.state }}">{{ t.state }}</span></td>
+        <td><code class="mono">{{ t.id[:8] }}</code></td>
+        <td>{% if t.assigned_agent_id %}<code class="mono">{{ t.assigned_agent_id[:8] }}</code>{% else %}—{% endif %}</td>
+        <td>{{ t.retry_count }}</td>
+        <td class="text-error">{{ t.error_message or '—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    {% if page > 1 %}
+      <a class="filter-pill" href="/admin/tasks?state={{ state }}&page={{ page - 1 }}&per_page={{ per_page }}">‹ prev</a>
+    {% endif %}
+    <span class="muted small">Page {{ page }} of {{ pages }}</span>
+    {% if page < pages %}
+      <a class="filter-pill" href="/admin/tasks?state={{ state }}&page={{ page + 1 }}&per_page={{ per_page }}">next ›</a>
+    {% endif %}
+  </div>
+  {% else %}
+  <p class="muted">No tasks match this filter.</p>
+  {% endif %}
+</section>
+{% endblock %}

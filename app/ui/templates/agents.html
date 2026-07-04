@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Agents · Admin{% endblock %}
+{% block heading %}Agents{% endblock %}
+{% block meta %}<span class="muted">{{ agents|length }} registered</span>{% endblock %}
+{% block body %}
+{% if agents %}
+<section class="card">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Created</th>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Tools</th>
+        <th>Agent ID</th>
+        <th>System prompt</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in agents %}
+      <tr>
+        <td class="muted">{{ a.created_at }}</td>
+        <td><strong>{{ a.name }}</strong></td>
+        <td><span class="badge badge-role-{{ a.role }}">{{ a.role }}</span></td>
+        <td>
+          {% if a.tools %}
+            {% for t in a.tools %}<span class="tag">{{ t.name if t.name else t }}</span>{% endfor %}
+          {% else %}
+            <span class="muted small">—</span>
+          {% endif %}
+        </td>
+        <td><code class="mono">{{ a.id[:8] }}</code></td>
+        <td class="muted small prompt-cell">{{ a.system_prompt[:120] }}{% if a.system_prompt|length > 120 %}…{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% else %}
+<section class="card">
+  <p class="muted">No agents registered yet. Use <code>POST /api/agents</code> to register one.</p>
+</section>
+{% endif %}
+{% endblock %}

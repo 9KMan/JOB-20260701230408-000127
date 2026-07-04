@@ -14,7 +14,8 @@ from datetime import datetime
 from typing import Any, Optional
 
 from sqlalchemy import Float, ForeignKey, Index, Integer, String, Text, text
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import UUID
+from app.models.base import JSONBDictType as JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
@@ -83,7 +84,7 @@ class Run(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         JSONB,
         nullable=False,
         default=dict,
-        server_default=text("'{}'::jsonb"),
+        server_default=text("'{}'"),
     )
 
     __table_args__ = (

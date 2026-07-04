@@ -108,11 +108,13 @@ def test_pydantic_settings_works() -> None:
 
 def test_settings_load() -> None:
     """``app.settings.Settings`` instantiates from env vars with sane defaults."""
-    # Ensure deterministic defaults.
-    os.environ.setdefault("DATABASE_URL", "postgresql+asyncpg://x:y@h:5432/d")
-    os.environ.setdefault("JWT_SECRET", "x" * 48)
-    os.environ.setdefault("VECTOR_DIM", "1536")
-    os.environ.setdefault("VECTOR_INDEX_TYPE", "hnsw")
+    # Ensure deterministic defaults — we set (not setdefault) so the
+    # test is independent of any earlier test that may have set a
+    # SQLite fallback URL.
+    os.environ["DATABASE_URL"] = "postgresql+asyncpg://x:y@h:5432/d"
+    os.environ["JWT_SECRET"] = "x" * 48
+    os.environ["VECTOR_DIM"] = "1536"
+    os.environ["VECTOR_INDEX_TYPE"] = "hnsw"
     from app.settings import get_settings
 
     get_settings.cache_clear()

@@ -234,6 +234,12 @@ def create_app() -> FastAPI:
             "stack": "/stack",
         }
 
+    # --- Routers (api + admin) ------------------------------------------
+    from app.api import mount_routers
+    from app.ui.admin import mount_admin
+    mount_routers(app)
+    mount_admin(app)
+
     return app
 
 

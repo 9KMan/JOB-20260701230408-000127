@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Review queue · Admin{% endblock %}
+{% block heading %}Review queue{% endblock %}
+{% block meta %}<span class="muted">{{ items|length }} item(s) awaiting a human decision</span>{% endblock %}
+{% block body %}
+{% if items %}
+<section class="card">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Item ID</th>
+        <th>Task ID</th>
+        <th>Reason</th>
+        <th>Action summary</th>
+        <th>Decision</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr>
+        <td><code class="mono">{{ it.id[:8] }}</code></td>
+        <td>{% if it.task_id %}<code class="mono">{{ it.task_id[:8] }}</code>{% else %}—{% endif %}</td>
+        <td>{{ it.reason or '—' }}</td>
+        <td class="muted small">
+          {% set keys = it.action.keys()|list if it.action is mapping else [] %}
+          {% if keys %}
+            {% for k in keys[:3] %}<code class="mono">{{ k }}={{ it.action[k] }}</code>{% if not loop.last %} {% endif %}{% endfor %}
+          {% else %}—{% endif %}
+        </td>
+        <td>
+          <form method="post" action="/admin/review/{{ it.id }}/resolve" class="inline-form">
+            <input type="hidden" name="resolved_by" value="admin">
+            <button type="submit" name="decision" value="approved" class="btn btn-success">Approve</button>
+            <button type="submit" name="decision" value="rejected" class="btn btn-error">Reject</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% else %}
+<section class="card">
+  <p class="muted">Nothing waiting on a human. Nice.</p>
+</section>
+{% endif %}
+{% endblock %}
