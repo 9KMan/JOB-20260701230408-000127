@@ -571,4 +571,3 @@ secrets, or proprietary system names appear in this repo.
 **KMan | AI-Augmented Engineering Factory** — principal-engineer work
 augmented by an AI build pipeline. Public reference patterns, private
 engagements, shipped.
-
